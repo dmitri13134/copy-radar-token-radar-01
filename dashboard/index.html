@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Copy Radar — pre-token protocols ranked as copy-trading signals</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <span class="logo" aria-hidden="true">&#9679;</span>
+    <div>
+      <h1>Copy Radar</h1>
+      <p class="sub">Token launch radar, read as copy-trading signals. Mirror the crowd's committed capital — before a token exists.</p>
+    </div>
+  </div>
+  <dl class="stats" id="stats"></dl>
+</header>
+
+<nav class="tabs" aria-label="Views">
+  <button data-view="board" class="on" type="button">Board</button>
+  <button data-view="live" type="button">Live tokens</button>
+  <button data-view="model" type="button">Signal model</button>
+</nav>
+
+<section class="controls" aria-label="Filters">
+  <label>Search <input id="q" type="search" placeholder="protocol name or slug" autocomplete="off"></label>
+  <label>Category <select id="cat"><option value="">All categories</option></select></label>
+  <label>Signal <select id="sig">
+    <option value="">All signals</option>
+    <option>STRONG MIRROR</option><option>MIRROR</option><option>WATCH</option><option>TRACK</option>
+  </select></label>
+  <label>Chain <select id="chain"><option value="">All chains</option></select></label>
+  <label>Min TVL <input id="minTvl" type="number" min="0" step="1000000" placeholder="0"></label>
+  <label>Sort <select id="sort">
+    <option value="value">Implied value</option>
+    <option value="score">Copy score</option>
+    <option value="tvl">TVL</option>
+    <option value="flow">7-day flow</option>
+    <option value="age">Age, no token</option>
+  </select></label>
+  <button id="reset" type="button">Reset</button>
+</section>
+
+<p class="legend" id="legend"></p>
+
+<main>
+  <section id="view-board" class="view">
+    <table id="board">
+      <thead><tr>
+        <th>#</th><th>Protocol</th><th>Signal</th><th>Copy score</th>
+        <th>Implied value</th><th>TVL</th><th>7d</th><th>Age</th><th>Chains</th><th>Mirror with</th>
+      </tr></thead>
+      <tbody></tbody>
+    </table>
+    <p class="count" id="count"></p>
+  </section>
+
+  <section id="view-live" class="view" hidden>
+    <p class="note">These tokens already trade. The market prices them — no model claim is made here. They are shown so the board's pre-token rows are never confused with them.</p>
+    <table id="live">
+      <thead><tr><th>Protocol</th><th>Market cap</th><th>TVL</th><th>7d</th><th>Chains</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <section id="view-model" class="view" hidden>
+    <h2>How a signal is built</h2>
+    <p>Every row is scored by one function, <code>copySignal</code> in <code>lib/model.ts</code>, from the snapshot's own figures only. No name is ever special-cased.</p>
+    <pre id="formula"></pre>
+    <h3>Signal tuner</h3>
+    <p>Move the weights and the board re-ranks in this page, using the same function. The submitted board uses the weights below.</p>
+    <div class="tuner" id="tuner"></div>
+    <p class="count" id="tunerOut"></p>
+  </section>
+
+  <section id="detail" class="detail" hidden aria-live="polite"></section>
+</main>
+
+<footer>
+  <p>Snapshot: DefiLlama protocols, fetched <span id="asof"></span>. “Records no token” means the record carries none — never that the protocol has none. Implied values are this radar's own claim, not a prediction that a token is issued or when.</p>
+  <p>Method: TVL is the crowd's committed capital, the 7-day change is the flow of new capital, tenure without a token is the accumulation window, chain count is the crowd's spread. Farm plans size each position by its signal and give cost and time per step.</p>
+</footer>
+
+<script src="../data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
